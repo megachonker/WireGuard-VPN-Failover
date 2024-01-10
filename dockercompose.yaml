@@ -1,0 +1,47 @@
+version: "3"
+services:
+  wg-srv-A:
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    cap_add:
+      - NET_ADMIN
+    container_name: wg-srv-A
+    image: "lscr.io/linuxserver/wireguard:latest"
+    volumes:
+      - ./srv-a.conf:/config/wg_confs/srv-a.conf
+
+  wg-srv-B:
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    cap_add:
+      - NET_ADMIN
+    container_name: wg-srv-B
+    image: "lscr.io/linuxserver/wireguard:latest"
+    volumes:
+      - ./srv-b.conf:/config/wg_confs/srv-b.conf
+
+  wg-cli-A:
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    cap_add:
+      - NET_ADMIN
+    container_name: wg-cli-A
+    image: "lscr.io/linuxserver/wireguard:latest"
+    volumes:
+      - ./script.sh:/script.sh
+      - ./cli-a.conf:/config/wg_confs/cli-a.conf
+      - ./cli-a-backup.conf:/config/wg_confs/cli-a-backup.conf
+    command: bash -c "sleep 10 && bash ./script.sh cli-a 10.0.1.1 1& bash ./script.sh cli-a-backup 10.0.1.2 2"
+
+  wg-cli-B:
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    cap_add:
+      - NET_ADMIN
+    container_name: wg-cli-B
+    image: "lscr.io/linuxserver/wireguard:latest"
+    volumes:
+      - ./script.sh:/script.sh
+      - ./cli-b.conf:/config/wg_confs/cli-b.conf
+      - ./cli-b-backup.conf:/config/wg_confs/cli-b-backup.conf
+    command: bash -c "sleep 10 && bash ./script.sh cli-b 10.0.1.1 1& bash ./script.sh cli-b-backup 10.0.1.2 2"
