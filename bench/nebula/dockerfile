@@ -1,0 +1,4 @@
+FROM debian
+RUN apt-get update && apt-get install nebula  -y
+RUN apt-get install iperf3 iproute2 iputils-ping -y
+ENTRYPOINT ["/bin/nebula", "-config", "/config.yml"]

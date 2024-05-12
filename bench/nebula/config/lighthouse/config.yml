@@ -1,0 +1,21 @@
+pki:
+  ca: /ca.crt
+  cert: /lighthouse.crt
+  key: /lighthouse.key
+
+listen:
+  # host: 0.0.0.0
+  port: 4242
+
+lighthouse:
+  am_lighthouse: true
+
+firewall:
+  outbound:
+    - port: any
+      proto: any
+      host: any
+  inbound:
+    - port: any
+      proto: any
+      host: any

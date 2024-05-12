@@ -1,0 +1,59 @@
+
+services:
+  lighthouse:
+    build: .
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./config/lighthouse/config.yml:/config.yml
+      - ./ca.crt:/ca.crt
+      - ./config/lighthouse/lighthouse.crt:/lighthouse.crt
+      - ./config/lighthouse/lighthouse.key:/lighthouse.key
+    cap_add:
+      - NET_ADMIN
+    # network_mode: "bridge"
+    networks:
+      custom_network:
+        ipv4_address: 10.0.0.4
+
+
+  hosta:
+    build: .
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./config/hostA/config.yml:/config.yml
+      - ./ca.crt:/ca.crt
+      - ./config/hostA/hostA.key:/hostA.key
+      - ./config/hostA/hostA.crt:/hostA.crt
+    # depends_on:
+      # - lighthouse
+    cap_add:
+      - NET_ADMIN
+    networks:
+      custom_network:
+        ipv4_address: 10.0.0.2
+
+  hostb:
+    build: .
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./config/hostB/config.yml:/config.yml
+      - ./ca.crt:/ca.crt
+      - ./config/hostB/hostB.crt:/hostB.crt
+      - ./config/hostB/hostB.key:/hostB.key
+    # depends_on:
+      # - lighthouse
+    cap_add:
+      - NET_ADMIN
+    networks:
+      custom_network:
+        ipv4_address: 10.0.0.3
+
+networks:
+  custom_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24

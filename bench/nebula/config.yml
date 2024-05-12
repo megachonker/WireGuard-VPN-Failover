@@ -1,0 +1,24 @@
+pki:
+  ca: ./ca.crt
+  cert: ./config/hostA/hostA.crt
+  key: ./config/hostA/hostA.key
+
+static_host_map:
+  "192.168.100.1": ["12.34.56.78:4242"]
+
+lighthouse:
+  hosts:
+    - "192.168.100.1"
+
+punchy:
+  punch: true
+
+firewall:
+  outbound:
+    - port: any
+      proto: any
+      host: any
+  inbound:
+    - port: any
+      proto: any
+      host: any

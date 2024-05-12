@@ -1,0 +1,36 @@
+
+services:
+  wga:
+    build:
+      context: .
+      dockerfile: wga.Dockerfile
+
+    cap_add:
+      - NET_ADMIN
+    networks:
+      custom_network:
+        ipv4_address: 10.0.1.2
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    # command: "sleep 100"
+
+
+  wgb:
+    build:
+      context: .
+      dockerfile: wgb.Dockerfile
+
+    cap_add:
+      - NET_ADMIN
+    networks:
+      custom_network:
+        ipv4_address: 10.0.1.3
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    # command: wg-quick up cli-b
+networks:
+  custom_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
